@@ -1,0 +1,17 @@
+# Ignorar arquivos de configuração do VS Code
+.vscode/
+
+# Ignorar imagens na pasta uploads
+uploads/*
+
+# Ignorar arquivos temporários
+*.log
+*.tmp
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar backups
+*.bak
+*.swp
