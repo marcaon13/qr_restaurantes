@@ -14,21 +14,14 @@ if ($empresa = $result->fetch_assoc()) {
 
     if (password_verify($senha, $empresa['senha'])) {
 
-        // $_SESSION['empresa_id'] = $empresa['id'];
-        // $_SESSION['empresa_nome'] = $empresa['nome'];
-
-        // // ✅ REDIRECIONA PARA O DASHBOARD
-        // header("Location: ../dashboard.php");
-        // exit;
-
         $_SESSION['empresa_id'] = $empresa['id'];
         $_SESSION['empresa_nome'] = $empresa['nome'];
 
         header("Location: ../dashboard.php");
         exit;
-
     }
 }
 
-header("Location: ../login.php?erro=1");
+// ❌ LOGIN INVÁLIDO → volta para o login com erro
+header("Location: ../index.php?erro=1");
 exit;
