@@ -1,40 +1,45 @@
-function excluirProduto(id) {
-    if (!confirm("Deseja realmente excluir este produto?")) return;
+// ===== MODAL NOVO PRODUTO =====
 
-    fetch("api/excluir_produto.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "id=" + id
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.sucesso) {
-            const card = document.getElementById("produto-" + id);
-            if (card) card.remove();
-        } else {
-            alert(data.erro || "Erro ao excluir produto");
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("modal");
+
+    // Fecha ao clicar fora
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            fecharModal();
         }
-    })
-    .catch(() => alert("Erro de conexão"));
-}
+    });
+});
 
 function abrirModal() {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('show'), 10);
-}
-// function abrirModal() {
-//     alert("CLIQUE FUNCIONOU");
-//     const modal = document.getElementById('modal');
-//     modal.style.display = 'flex';
-//     setTimeout(() => modal.classList.add('show'), 10);
-// }
+    const modal = document.getElementById("modal");
+    modal.style.display = "flex";
 
+    // força reflow para animação funcionar
+    modal.offsetHeight;
+
+    modal.classList.add("show");
+}
 
 function fecharModal() {
-    const modal = document.getElementById('modal');
-    modal.classList.remove('show');
-    setTimeout(() => modal.style.display = 'none', 250);
+    const modal = document.getElementById("modal");
+    modal.classList.remove("show");
+
+    setTimeout(() => {
+        modal.style.display = "none";
+    }, 250);
 }
 
+// ===== EXCLUIR PRODUTO =====
+function excluirProduto(id) {
+    if (!confirm("Tem certeza que deseja excluir este produto?")) return;
 
+    fetch(`api/excluir_produto.php?id=${id}`)
+        .then(res => {
+            if (res.ok) {
+                document.getElementById(`produto-${id}`).remove();
+            } else {
+                alert("Erro ao excluir produto");
+            }
+        });
+}

@@ -5,7 +5,7 @@ require_once 'api/auth.php';
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard | QR Restaurantes</title>
+<title>QR Restaurantes</title>
 
 <link rel="stylesheet" href="css/dashboard.css">
 <script defer src="js/dashboard.js"></script>
@@ -26,7 +26,7 @@ require_once 'api/auth.php';
       <a href="produtos.php">🍔 Produtos</a>
       <a href="qrcodes.php">🔳 QR Codes</a>
       <a href="pedidos.php">🧾 Pedidos</a>
-      <a href="logout.php" class="logout">🚪 Sair</a>
+      <a href="index.php" class="logout">🚪 Sair</a>
     </nav>
   </aside>
 

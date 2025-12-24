@@ -1,23 +1,45 @@
 <?php
-require_once 'auth.php';
-require_once 'db.php';
+require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/db.php';
 
-if (!isset($_POST['id'])) {
+if (!isset($_GET['id'])) {
     http_response_code(400);
-    echo json_encode(['erro' => 'ID não enviado']);
     exit;
 }
 
-$produto_id = intval($_POST['id']);
+$produto_id = (int) $_GET['id'];
 $empresa_id = $_SESSION['empresa_id'];
 
-$sql = "DELETE FROM produtos WHERE id = ? AND empresa_id = ?";
-$stmt = $conn->prepare($sql);
+/*
+  Primeiro pegamos a imagem
+  para apagar o arquivo físico depois
+*/
+$stmt = $conn->prepare(
+    "SELECT imagem FROM produtos 
+     WHERE id = ? AND empresa_id = ?"
+);
 $stmt->bind_param("ii", $produto_id, $empresa_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($stmt->execute()) {
-    echo json_encode(['sucesso' => true]);
-} else {
-    http_response_code(500);
-    echo json_encode(['erro' => 'Erro ao excluir']);
+if (!$produto = $result->fetch_assoc()) {
+    http_response_code(404);
+    exit;
 }
+
+/* Apaga do banco */
+$stmt = $conn->prepare(
+    "DELETE FROM produtos 
+     WHERE id = ? AND empresa_id = ?"
+);
+$stmt->bind_param("ii", $produto_id, $empresa_id);
+$stmt->execute();
+
+/* Apaga a imagem do servidor */
+$imagem = __DIR__ . '/../uploads/' . $produto['imagem'];
+if (file_exists($imagem)) {
+    unlink($imagem);
+}
+
+http_response_code(200);
+exit;

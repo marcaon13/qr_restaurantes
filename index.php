@@ -1,34 +1,36 @@
 <?php
 session_start();
 
-$erro = false;
-if (isset($_GET['erro']) && $_GET['erro'] === '1') {
-    $erro = true;
+// captura erro uma única vez
+$erroLogin = false;
+if (isset($_SESSION['login_erro'])) {
+    $erroLogin = true;
+    unset($_SESSION['login_erro']); // 🔥 LIMPA O ERRO
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>QR Restaurantes | Login</title>
+    <meta charset="UTF-8">
+    <title>QR Restaurantes | Login</title>
 
-<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
-<style>
-.erro {
-    color: #e60000;
-    margin-bottom: 15px;
-    font-weight: 600;
-    animation: piscar 0.8s infinite alternate;
-}
+    <style>
+        .erro-login {
+            margin-top: 15px;
+            color: #e60000;
+            font-weight: 600;
+            text-align: center;
+            animation: piscar 0.9s ease-in-out infinite alternate;
+        }
 
-@keyframes piscar {
-    from { opacity: 1; }
-    to { opacity: 0.4; }
-}
-</style>
+        @keyframes piscar {
+            from { opacity: 1; }
+            to   { opacity: 0.3; }
+        }
+    </style>
 </head>
-
 <body>
 
 <header>
@@ -38,14 +40,16 @@ if (isset($_GET['erro']) && $_GET['erro'] === '1') {
 <div class="container">
     <h2>Login da Empresa</h2>
 
-    <?php if ($erro): ?>
-        <div class="erro">Usuário não encontrado</div>
-    <?php endif; ?>
-
     <form action="api/login.php" method="POST">
-        <input name="email" type="email" placeholder="Email" required>
-        <input name="senha" type="password" placeholder="Senha" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="senha" placeholder="Senha" required>
         <button type="submit">Entrar</button>
+
+        <?php if ($erroLogin): ?>
+            <div class="erro-login">
+                Usuário não encontrado
+            </div>
+        <?php endif; ?>
     </form>
 </div>
 
